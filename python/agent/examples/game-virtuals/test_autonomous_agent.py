@@ -27,10 +27,12 @@ import os
 load_dotenv()
 
 game_api_key = os.getenv("GAME_API_KEY")
+tledger_api_key = os.getenv("TLEDGER_API_KEY")
+tledger_api_secret = os.getenv("TLEDGER_API_SECRET")
 
 headers = {
-    "X-API-Key": "aS3QDb6MI18ob_XsgNX8tGusmJD1jWOA1BGgS-6rxlg",
-    "X-API-Secret": "Cgym1PlELH01GRepxbKBCR08V7SoHrpYDsRGeGiGu1_vy35zolQyYPo12goxbmjLUSQhxCYcueSeTbWT8fmMrQ",
+    "X-API-Key": tledger_api_key,
+    "X-API-Secret": tledger_api_secret,
     "Content-Type": "application/json"
 }
 
