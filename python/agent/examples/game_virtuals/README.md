@@ -1,4 +1,4 @@
-# CrewAI Example
+# Game SDK Example
 
 ## Setup
 
