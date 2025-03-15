@@ -1,4 +1,4 @@
-"""Stripe Agent Toolkit."""
+"""tLedger Agent Toolkit."""
 
 from typing import List, Optional
 
@@ -15,7 +15,7 @@ from .tool import TledgerTool
 
 class TledgerAgentToolkit:
     _tools: List[Function] = PrivateAttr(default=[])
-    _stripe_api: TLedgerAPI = PrivateAttr(default=None)
+    _tLedger_api: TLedgerAPI = PrivateAttr(default=None)
 
     def __init__(
         self, api_key: str, api_secret: str
@@ -23,8 +23,6 @@ class TledgerAgentToolkit:
         super().__init__()
 
         self.tLedger_api = TLedgerAPI(api_key=api_key, api_secret=api_secret)
-
-
 
         self._tools = [
             TledgerTool(self.tLedger_api)

@@ -10,19 +10,18 @@ This example demonstrates how to:
 The example implements a simple environment with objects that workers can interact with
 through various actions like taking, throwing, and sitting.
 """
+import os
 import time
-
-
+from typing import Tuple
 
 import requests
 
 from dotenv import load_dotenv
-
-
 from game_sdk.game.agent import Agent, WorkerConfig
 from game_sdk.game.custom_types import Function, Argument, FunctionResult, FunctionResultStatus
-from typing import Tuple
-import os
+
+from agent.tledger_agent_toolkit.game_virtuals.TledgerAgentToolkit import TledgerAgentToolkit
+
 
 load_dotenv()
 
@@ -30,48 +29,11 @@ game_api_key = os.getenv("GAME_API_KEY")
 tledger_api_key = os.getenv("TLEDGER_API_KEY")
 tledger_api_secret = os.getenv("TLEDGER_API_SECRET")
 
-headers = {
-    "X-API-Key": tledger_api_key,
-    "X-API-Secret": tledger_api_secret,
-    "Content-Type": "application/json"
-}
+tledger_agent_toolkit = TledgerAgentToolkit(
+    api_key=tledger_api_key,
+    api_secret=tledger_api_secret
+)
 
-
-# Polling for payment status
-def submit_payment() -> str:
-    url = "http://localhost:4000/api/v1/payment"
-
-    data = {
-        "receiving_agent_id": "agt_600575e3-0568-4e20-be4a-16d33421bc42",
-        "payment_amount": 10,
-        "currency": "sol"
-    }
-
-    response = requests.post(url, headers=headers, json=data)
-
-    print(response.status_code, response.json())  # Prints status and response body
-
-    return response.json().get("id")
-
-# Polling for payment status
-def wait_for_payment_success(payment_id: str):
-    url = f"http://localhost:4000/api/v1/payment/{payment_id}"
-
-    while True:
-        response = requests.get(url, headers=headers)
-
-        if response.status_code == 200:
-            payment_data = response.json()
-            status = payment_data.get("status")
-            print(f"Payment status: {status}")
-
-            if status == "success":
-                print("Payment has been successfully completed! ✅")
-                break
-        else:
-            print(f"Failed to fetch payment status. HTTP {response.status_code}: {response.text}")
-
-        time.sleep(5)  # Wait for 5 seconds before retrying
 
 
 def get_worker_state_fn(function_result: FunctionResult, current_state: dict) -> dict:
@@ -272,19 +234,6 @@ def throw_furniture(object: str, **kwargs) -> Tuple[FunctionResultStatus, str, d
 
 
 
-def pay_the_agent(object: str, **kwargs) -> Tuple[FunctionResultStatus, str, dict]:
-    """
-    Function to pay the agent
-
-    Args:
-        object: Name of the object to sit on
-        **kwargs: Additional arguments that might be passed
-    """
-    payment_id = submit_payment()
-    wait_for_payment_success(payment_id)
-
-    return FunctionResultStatus.DONE, f"Successfully paid the agent for the {object}", {}
-
 # Create functions for each executable with detailed argument specifications
 take_object_fn = Function(
     fn_name="take",
@@ -321,19 +270,11 @@ throw_furniture_fn = Function(
     executable=throw_furniture
 )
 
-pay_tax_agent_fn = Function(
-        fn_name="pay",
-        fn_description="Pay the tax agent",
-        args=[Argument(name="object", type="string", description="Pay the tax agent for the object")],
-        executable=pay_the_agent
-)
-
-# Create the specialized workers
 tax_payer = WorkerConfig(
     id="tax_payer",
     worker_description="A worker specialized in paying the tax agent for destruction",
     get_state_fn=get_worker_state_fn,
-    action_space=[pay_tax_agent_fn]
+    action_space=tledger_agent_toolkit.get_tools()
 )
 
 # Create the specialized workers
@@ -356,7 +297,7 @@ chaos_agent = Agent(
     api_key=game_api_key,
     name="Chaos",
     agent_goal="Conquer the world by causing chaos while paying taxes",
-    agent_description="You are a mischievous master of chaos is very strong but with a very short attention span, and not so much brains. You also pay a fair share to the tax agent for any chaos you brew",
+    agent_description="You are a mischievous master of chaos is very strong but with a very short attention span, and not so much brains. You also pay 10 sol to the tax agent with agt_d6ef9f79-426d-4ecf-84f8-61944c8995c1 agent Id for any chaos you brew",
     get_agent_state_fn=get_agent_state_fn,
     workers=[fruit_thrower, furniture_thrower, tax_payer]
 )
