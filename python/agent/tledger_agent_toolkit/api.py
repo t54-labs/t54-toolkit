@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from typing import Optional, List, Dict, Any
 
 import requests
@@ -16,7 +17,7 @@ class TLedgerAPI:
     base_url: str
     configuration: Dict[str, Any]
 
-    def __init__(self, api_key: str, api_secret: str, base_url: str = "http://localhost:4000/api/v1",
+    def __init__(self, api_key: str, api_secret: str,
                  configuration: Dict[str, Any] = None):
         """
         Initializes the TLedger Agent Toolkit.
@@ -29,7 +30,7 @@ class TLedgerAPI:
         """
         self._api_key = api_key
         self._api_secret = api_secret
-        self.base_url = base_url
+        self.base_url = os.getenv("TLEDGER_API_URL")
         self.configuration = configuration or {}
 
     def _request(self, method: str, endpoint: str, data: Dict[str, Any] = None) -> Dict[str, Any]:
@@ -69,8 +70,8 @@ class TLedgerAPI:
         Returns:
             Dict[str, Any]: The created payment response.
         """
-        # if not self.configuration.get("actions", {}).get("payment", {}).get("create", False):
-        #     raise PermissionError("Payment creation is disabled in configuration.")
+        if not self.configuration.get("actions", {}).get("payment", {}).get("create", False):
+            raise PermissionError("Payment creation is disabled in configuration.")
         print(f"Payment request for beneficiary agent: {receiving_agent_id}, amount: {amount}, currency: {currency}")
         payload = {
             "receiving_agent_id": receiving_agent_id,

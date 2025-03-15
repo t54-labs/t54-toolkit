@@ -31,7 +31,14 @@ tledger_api_secret = os.getenv("TLEDGER_API_SECRET")
 
 tledger_agent_toolkit = TledgerAgentToolkit(
     api_key=tledger_api_key,
-    api_secret=tledger_api_secret
+    api_secret=tledger_api_secret,
+    configuration={
+        "actions": {
+            "payment": {
+                "create": True
+            }
+        }
+    }
 )
 
 
