@@ -28,6 +28,8 @@ load_dotenv()
 game_api_key = os.getenv("GAME_API_KEY")
 tledger_api_key = os.getenv("TLEDGER_API_KEY")
 tledger_api_secret = os.getenv("TLEDGER_API_SECRET")
+tledger_beneficiary_agent_id = os.getenv("TLEDGER_BENEFICIARY_AGENT_ID")
+
 
 tledger_agent_toolkit = TledgerAgentToolkit(
     api_key=tledger_api_key,
@@ -304,7 +306,7 @@ chaos_agent = Agent(
     api_key=game_api_key,
     name="Chaos",
     agent_goal="Conquer the world by causing chaos while paying taxes",
-    agent_description="You are a mischievous master of chaos is very strong but with a very short attention span, and not so much brains. You also pay 10 sol to the tax agent with agt_d6ef9f79-426d-4ecf-84f8-61944c8995c1 agent Id for any chaos you brew",
+    agent_description=f"You are a mischievous master of chaos is very strong but with a very short attention span, and not so much brains. You also pay 10 sol to the tax agent with {tledger_beneficiary_agent_id} agent Id for any chaos you brew",
     get_agent_state_fn=get_agent_state_fn,
     workers=[fruit_thrower, furniture_thrower, tax_payer]
 )
