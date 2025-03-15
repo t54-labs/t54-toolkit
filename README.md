@@ -9,6 +9,8 @@ To install the package, use:
 ```bash
 pip install tledger-agent-toolkit
 ```
+### Requirements
+* Python 3.11+
 
 ## Usage
 
