@@ -1,6 +1,6 @@
-# TLedger Agent Toolkit
+# tLedger Agent Toolkit
 
-The **TLedger Agent Toolkit** allows integration with TLedger APIs for handling Agent to Agent payments using popular agent frameworks like Virtual's GAME sdk, ai16z etc.
+The **tLedger Agent Toolkit** allows integration with TLedger APIs for handling Agent to Agent payments using popular agent frameworks like Virtual's GAME sdk, ai16z etc.
 
 ## Installation
 
@@ -14,7 +14,7 @@ pip install tledger-agent-toolkit
 
 ## Usage
 
-To use the **TLedger Agent Toolkit**, configure it with your API credentials and actions.
+To use the **tLedger Agent Toolkit**, configure it with your API credentials and actions.
 
 ```python
 from agents import Agent
