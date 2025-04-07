@@ -1,6 +1,6 @@
 # tLedger Agent Toolkit
 
-The **tLedger Agent Toolkit** allows integration with TLedger APIs for handling Agent to Agent payments using popular agent frameworks like Virtual's GAME sdk, ai16z etc.
+The **tLedger Agent Toolkit** allows integration with tLedger APIs for handling Agent to Agent payments using popular agent frameworks like Virtual's GAME sdk, ai16z etc.
 
 ## Installation
 
